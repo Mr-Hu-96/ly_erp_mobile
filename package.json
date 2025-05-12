@@ -1,11 +1,11 @@
 {
-  "name": "unibest",
+  "name": "ly",
   "type": "commonjs",
   "version": "2.6.1",
-  "description": "unibest - 最好的 uniapp 开发模板",
+  "description": "ly",
   "author": {
-    "name": "feige996",
-    "zhName": "菲鸽",
+    "name": "jethro",
+    "zhName": "jethro",
     "email": "1020103647@qq.com",
     "github": "https://github.com/feige996",
     "gitee": "https://gitee.com/feige996"
@@ -133,6 +133,7 @@
     "@types/wechat-miniprogram": "^3.4.8",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "@uni-helper/uni-app-types": "1.0.0-alpha.6",
     "@uni-helper/uni-types": "1.0.0-alpha.3",
     "@uni-helper/vite-plugin-uni-layouts": "^0.1.10",
     "@uni-helper/vite-plugin-uni-manifest": "^0.2.7",
@@ -176,5 +177,6 @@
     "vite-plugin-restart": "^0.4.2",
     "vitepress": "^1.5.0",
     "vue-tsc": "^1.8.27"
-  }
+  },
+  "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af"
 }

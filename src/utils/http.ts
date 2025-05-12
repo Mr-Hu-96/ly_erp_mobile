@@ -1,6 +1,29 @@
 import { CustomRequestOptions } from '@/interceptors/request'
+import { showLoading, hideLoading } from '@/interceptors/loadingManager'
+import { useUserStore } from '@/store/user'
+// #ifdef APP-PLUS
+const modal = uni.requireNativePlugin('modal')
+// #endif
 
+const handleError = (msg: string) => {
+  // #ifdef APP-PLUS
+  modal.toast({
+    message: msg,
+    duration: 1.5,
+  })
+  // #endif
+  // #ifndef APP-PLUS
+  uni.showToast({
+    icon: 'error',
+    title: msg,
+  })
+  // #endif
+}
 export const http = <T>(options: CustomRequestOptions) => {
+  // 如果不需要显示 Loading，则跳过
+  if (options.useLoading !== false) {
+    showLoading()
+  }
   // 1. 返回 Promise 对象
   return new Promise<IResData<T>>((resolve, reject) => {
     uni.request({
@@ -12,31 +35,45 @@ export const http = <T>(options: CustomRequestOptions) => {
       // 响应成功
       success(res) {
         // 状态码 2xx，参考 axios 的设计
+
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          // 2.1 提取核心数据 res.data
-          resolve(res.data as IResData<T>)
+          if (res.data.code === 401) {
+            const { clearUserInfo } = useUserStore()
+            // 401错误  -> 清理用户信息，跳转到登录页
+            clearUserInfo()
+            uni.navigateTo({ url: '/pages-sub/login/index' })
+            reject(res)
+          } else if (res.data.code === 200) {
+            // 2.1 提取核心数据 res.data
+            resolve(res.data as IResData<T>)
+          } else {
+            handleError(res.data.msg || '请求错误')
+            reject(res)
+          }
         } else if (res.statusCode === 401) {
+          const { clearUserInfo } = useUserStore()
           // 401错误  -> 清理用户信息，跳转到登录页
-          // userStore.clearUserInfo()
-          // uni.navigateTo({ url: '/pages/login/login' })
+          clearUserInfo()
+          uni.navigateTo({ url: '/pages-sub/login/index' })
           reject(res)
         } else {
           // 其他错误 -> 根据后端错误信息轻提示
-          !options.hideErrorToast &&
-            uni.showToast({
-              icon: 'none',
-              title: (res.data as IResData<T>).msg || '请求错误',
-            })
+          if (!options.hideErrorToast) {
+            handleError(res.data.msg || '请求错误')
+          }
+
           reject(res)
         }
       },
       // 响应失败
       fail(err) {
-        uni.showToast({
-          icon: 'none',
-          title: '网络错误，换个网络试试',
-        })
+        handleError('网络错误，换个网络试试')
         reject(err)
+      },
+      complete() {
+        if (options.useLoading !== false) {
+          hideLoading()
+        }
       },
     })
   })
@@ -76,5 +113,33 @@ export const httpPost = <T>(
   })
 }
 
+export const httpPut = <T>(
+  url: string,
+  data?: Record<string, any>,
+  query?: Record<string, any>,
+) => {
+  return http<T>({
+    url,
+    query,
+    data,
+    method: 'PUT',
+  })
+}
+
+export const httpDelete = <T>(
+  url: string,
+  data?: Record<string, any>,
+  query?: Record<string, any>,
+) => {
+  return http<T>({
+    url,
+    query,
+    data,
+    method: 'DELETE',
+  })
+}
+
 http.get = httpGet
 http.post = httpPost
+http.put = httpPut
+http.delete = httpDelete

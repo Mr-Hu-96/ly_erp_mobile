@@ -24,16 +24,34 @@
     "spacing": "3px",
     "list": [
       {
-        "iconPath": "static/tabbar/home.png",
-        "selectedIconPath": "static/tabbar/homeHL.png",
+        "iconPath": "static/tabbar/index.png",
+        "selectedIconPath": "static/tabbar/indexHL.png",
         "pagePath": "pages/index/index",
-        "text": "首页"
+        "text": "工单"
       },
       {
-        "iconPath": "static/tabbar/example.png",
-        "selectedIconPath": "static/tabbar/exampleHL.png",
-        "pagePath": "pages/about/about",
-        "text": "关于"
+        "iconPath": "static/tabbar/task.png",
+        "selectedIconPath": "static/tabbar/taskHL.png",
+        "pagePath": "pages/task/index",
+        "text": "任务"
+      },
+      {
+        "iconPath": "static/tabbar/about.png",
+        "selectedIconPath": "static/tabbar/aboutHL.png",
+        "pagePath": "pages/about/index",
+        "text": "菜单"
+      },
+      {
+        "iconPath": "static/tabbar/reportWork.png",
+        "selectedIconPath": "static/tabbar/reportWorkHL.png",
+        "pagePath": "pages/reportWork/index",
+        "text": "报工"
+      },
+      {
+        "iconPath": "static/tabbar/userCenter.png",
+        "selectedIconPath": "static/tabbar/userCenterHL.png",
+        "pagePath": "pages/userCenter/index",
+        "text": "我的"
       }
     ]
   },
@@ -43,16 +61,62 @@
       "type": "home",
       "style": {
         "navigationStyle": "custom",
-        "navigationBarTitleText": "首页"
+        "navigationBarTitleText": "工单"
       }
     },
     {
-      "path": "pages/about/about",
+      "path": "pages/about/index",
       "type": "page",
+      "layout": "default",
       "style": {
-        "navigationBarTitleText": "关于"
+        "navigationBarTitleText": "菜单"
+      }
+    },
+    {
+      "path": "pages/reportWork/index",
+      "type": "page",
+      "layout": "default",
+      "style": {
+        "navigationBarTitleText": "报工"
+      }
+    },
+    {
+      "path": "pages/task/index",
+      "type": "page",
+      "layout": "default",
+      "style": {
+        "navigationBarTitleText": "任务"
+      }
+    },
+    {
+      "path": "pages/userCenter/index",
+      "type": "page",
+      "needLogin": true,
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "个人中心"
       }
     }
   ],
-  "subPackages": []
+  "subPackages": [
+    {
+      "root": "pages-sub",
+      "pages": [
+        {
+          "path": "demo/index",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "分包页面 标题"
+          }
+        },
+        {
+          "path": "login/index",
+          "type": "page",
+          "style": {
+            "navigationBarTitleText": "登录"
+          }
+        }
+      ]
+    }
+  ]
 }
