@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import { navigate } from '@/utils/navigate'
 import { ref } from 'vue'
-// import { GET_USER_INFO } from '@/api/system/user'
-
+import { getInfo } from '@/api/login'
 const initState = { nickname: '', avatar: '' }
 
 export const useUserStore = defineStore(
@@ -16,7 +15,6 @@ export const useUserStore = defineStore(
 
     const clearUserInfo = () => {
       userInfo.value = { ...initState }
-      userData.value = {}
     }
     // 一般没有reset需求，不需要的可以删除
     const reset = () => {
@@ -24,24 +22,15 @@ export const useUserStore = defineStore(
     }
     const isLogined = computed(() => !!userInfo.value.token)
     async function logout() {
-      clearUserInfo()
+      setUserInfo({})
       // 回登录页带上当前路由地址
       await navigate.redirect('/pages-sub/login/index')
     }
     async function getUserData() {
-      // const res = await GET_USER_INFO()
-      // userData.value = res
-      const res = {
-        nickname: 'admin',
-        avatar: 'https://avatars.githubusercontent.com/u/10213409?v=4',
-        roles: ['admin'],
-        token: 'admin',
-        id: 'admin',
-      }
+      const res = await getInfo()
       userData.value = res
       return res
     }
-
     return {
       userInfo,
       setUserInfo,

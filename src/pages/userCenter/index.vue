@@ -14,16 +14,16 @@
       <view class="flex items-center relative">
         <wd-img :width="80" :height="80" mode="aspectFill" round src="/static/images/logo.png" />
         <view class="ml-2">
-          <view>{{ userData.userName || '用户' }}</view>
+          <view>{{ userData?.user?.userName || '用户' }}</view>
         </view>
       </view>
     </view>
     <wd-card title="个人信息">
       <wd-cell-group>
-        <wd-cell title="用户名" :value="userData.userName" icon="user" />
-        <wd-cell title="手机号" :value="userData.phonenumber" icon="call" />
-        <wd-cell title="邮箱" :value="userData.email" icon="logout" />
-        <wd-cell title="角色" :value="userData.getRoleNames" icon="user-circle" />
+        <wd-cell title="用户名" :value="userData?.user?.userName" icon="user" />
+        <wd-cell title="手机号" :value="userData?.user?.phonenumber" icon="call" />
+        <wd-cell title="邮箱" :value="userData?.user?.email" icon="logout" />
+        <wd-cell title="角色" :value="getRoleNames" icon="user-circle" />
         <wd-button type="warning" block @click="logout">退出登录</wd-button>
       </wd-cell-group>
     </wd-card>
@@ -32,12 +32,9 @@
 
 <script lang="ts" setup>
 import { useUserStore } from '@/store/user'
-const { logout } = useUserStore()
-const userData = reactive({
-  userName: 'admin',
-  phonenumber: '13688888888',
-  email: '2342342@gmail.com',
-  getRoleNames: '管理员',
+const { userData, logout } = useUserStore()
+const getRoleNames = computed(() => {
+  return userData?.user?.roles?.map((item: any) => item.roleName).join(',')
 })
 //
 </script>
