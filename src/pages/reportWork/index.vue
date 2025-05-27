@@ -594,13 +594,13 @@ const columnsPe = ref<Record<string, any>>([
   },
 ])
 const data = reactive({
-  salary: 0,
-  approved: 0,
-  total: 0,
-  count: 0,
-  good: 0,
-  bad: 0,
-  badRate: 0,
+  salary: 123712,
+  approved: 232,
+  total: 492,
+  count: 10020,
+  good: 8290,
+  bad: 1983,
+  badRate: 10,
 })
 </script>
 

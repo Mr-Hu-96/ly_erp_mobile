@@ -176,3 +176,60 @@ export const getEnvBaseUploadUrl = () => {
 
   return baseUploadUrl
 }
+
+/**
+ * @description 限制小数位数
+ * @param value 要处理的数字值
+ * @param n 小数位数限制，默认为 2
+ * @returns 处理后的数字
+ */
+export function toFixedWithLimit(value: number | string, n: number = 2): number {
+  // 将传入的值转换为数字类型
+  const number = parseFloat(value as string)
+
+  // 判断是否为有效的数字
+  if (isNaN(number)) {
+    return 0
+    // throw new Error('Invalid input: not a valid number');
+  }
+
+  // 获取传入数字的小数部分位数
+  const decimalLength = (number.toString().split('.')[1] || '').length
+
+  // 如果 n 大于等于实际小数位数，则直接返回原数
+  if (n >= decimalLength) {
+    return number
+  }
+
+  // 否则保留 n 位小数，返回数值类型
+  const factor = Math.pow(10, n)
+  return Math.round(number * factor) / factor
+}
+
+/**
+ * 获取当前日期的格式化字符串
+ * @param format 日期格式，支持替换占位符 YYYY、MM、DD、hh、mm、ss
+ * @returns 格式化后的日期字符串
+ */
+export function formatDateFormat(format: string): string {
+  const date = new Date()
+
+  // 获取当前日期的各个部分
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0') // 月份从 0 开始，因此要加 1
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  const seconds = String(date.getSeconds()).padStart(2, '0')
+
+  // 替换格式中的占位符
+  const formattedDate = format
+    .replace('YYYY', String(year))
+    .replace('MM', month)
+    .replace('DD', day)
+    .replace('hh', hours)
+    .replace('mm', minutes)
+    .replace('ss', seconds)
+
+  return formattedDate
+}
