@@ -107,7 +107,7 @@
           "type": "page",
           "layout": "default",
           "style": {
-            "navigationBarTitleText": "菜单"
+            "navigationBarTitleText": "数据看板"
           }
         },
         {
