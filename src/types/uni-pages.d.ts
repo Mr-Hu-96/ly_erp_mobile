@@ -9,8 +9,16 @@ interface NavigateToOptions {
        "/pages/reportWork/index" |
        "/pages/task/index" |
        "/pages/userCenter/index" |
+       "/pages-sub/board/board" |
        "/pages-sub/demo/index" |
-       "/pages-sub/login/index";
+       "/pages-sub/info/noGoodClass" |
+       "/pages-sub/info/noGoodTotal" |
+       "/pages-sub/info/yield" |
+       "/pages-sub/inWarehouse/list" |
+       "/pages-sub/login/index" |
+       "/pages-sub/outWarehouse/list" |
+       "/pages-sub/warehouse/list" |
+       "/pages-sub/device/plan/list";
 }
 interface RedirectToOptions extends NavigateToOptions {}
 

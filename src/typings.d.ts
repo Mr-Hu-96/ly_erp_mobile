@@ -4,6 +4,8 @@ declare global {
   type IResData<T> = {
     code: number
     msg: string
+    rows: any[]
+    total: number
     data: T
   }
 

@@ -103,6 +103,14 @@
       "root": "pages-sub",
       "pages": [
         {
+          "path": "board/board",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "菜单"
+          }
+        },
+        {
           "path": "demo/index",
           "type": "page",
           "style": {
@@ -110,10 +118,66 @@
           }
         },
         {
+          "path": "info/noGoodClass",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "不良品分布"
+          }
+        },
+        {
+          "path": "info/noGoodTotal",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "不良品项汇总"
+          }
+        },
+        {
+          "path": "info/yield",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "产量统计"
+          }
+        },
+        {
+          "path": "inWarehouse/list",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "入库单"
+          }
+        },
+        {
           "path": "login/index",
           "type": "page",
           "style": {
             "navigationBarTitleText": "登录"
+          }
+        },
+        {
+          "path": "outWarehouse/list",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "出库单"
+          }
+        },
+        {
+          "path": "warehouse/list",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "库存余额"
+          }
+        },
+        {
+          "path": "device/plan/list",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "设备点检计划"
           }
         }
       ]

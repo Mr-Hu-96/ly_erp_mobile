@@ -34,3 +34,10 @@ export function updateWorkOrderApi(data) {
 export function delWorkOrderApi(id) {
   return http.delete<any>('/produce/workOrder/' + id)
 }
+
+/**
+ * 首页-获取订单状态列表
+ */
+export function getWorkOrderStatusApi() {
+  return http.get<any>('/produce/workOrder/getWorkOrderStatus')
+}
