@@ -14,6 +14,7 @@ interface NavigateToOptions {
        "/pages-sub/info/noGoodClass" |
        "/pages-sub/info/noGoodTotal" |
        "/pages-sub/info/yield" |
+       "/pages-sub/inWarehouse/edit" |
        "/pages-sub/inWarehouse/list" |
        "/pages-sub/login/index" |
        "/pages-sub/outWarehouse/list" |
