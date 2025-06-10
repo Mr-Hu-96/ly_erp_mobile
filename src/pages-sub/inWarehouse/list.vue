@@ -66,7 +66,7 @@
           class="w-[40px] h-[40px] bg-[#0083ff] rounded-full flex items-center justify-center"
           @click="scanClick"
         >
-          <wd-icon name="scan" size="22px" color="#fff"></wd-icon>
+          <wd-icon name="add" size="22px" color="#fff"></wd-icon>
         </view>
       </template>
     </wd-fab>
@@ -78,8 +78,6 @@
 
 <script lang="ts" setup>
 import { listInWarehouseApi } from '@/api/warehouse/inWarehouse'
-import { Html5QrcodeScanner, Html5QrcodeScanType } from 'html5-qrcode'
-import { getRecordCheckApi } from '@/api/record/record'
 import { navigate } from '@/utils/navigate'
 const dataList = ref([])
 const paging = ref(null)
@@ -119,41 +117,9 @@ const querySubmit = () => {
 function handleSearch() {
   paging.value.reload()
 }
-function onScanSuccess(decodedText, decodedResult) {
-  // handle the scanned code as you like, for example:
-  console.log(`Code matched = ${decodedText}`, decodedResult)
-}
+
 function scanClick() {
-  // #ifdef H5
-  const config = {
-    fps: 10,
-    qrbox: { width: 100, height: 100 },
-    rememberLastUsedCamera: true,
-    // Only support camera scan type.
-    supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-  }
-  console.log(1231, config)
-  const html5QrcodeScanner = new Html5QrcodeScanner('reader', config, /* verbose= */ false)
-  html5QrcodeScanner.render(onScanSuccess)
-  // #endif
-  // #ifndef H5
-  // 允许从相机和相册扫码
-  uni.scanCode({
-    success: function (res) {
-      console.log('条码类型：' + res.scanType)
-      console.log('条码内容：' + res.result)
-      getRecordCheckApi({ id: res.result, type: '采购入库' }).then((_res) => {
-        navigate.push('/pages-sub/inWarehouse/edit', { id: res.result })
-      })
-      // .catch((_err) => {
-      //   uni.showToast({
-      //     title: '扫码错误',
-      //     icon: 'error',
-      //   })
-      // })
-    },
-  })
-  // #endif
+  navigate.push('/pages-sub/inWarehouse/edit')
 }
 </script>
 

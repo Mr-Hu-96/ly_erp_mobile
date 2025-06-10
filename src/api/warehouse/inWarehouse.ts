@@ -34,3 +34,10 @@ export function updateInWarehouseApi(data) {
 export function delInWarehouseApi(id) {
   return http.delete<any>('/warehouse/inWarehouse/' + id)
 }
+
+/**
+ * 扫码入库
+ */
+export function scanWarehouseApi(data) {
+  return http.post<any>('/warehouse/inWarehouse/scanWarehouse', data)
+}
