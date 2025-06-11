@@ -2,7 +2,7 @@
 {
   layout: 'default',
   style: {
-    navigationBarTitleText: '入库单编辑',
+    navigationBarTitleText: '出库单编辑',
   },
 }
 </route>
@@ -12,25 +12,37 @@
     <wd-form ref="formRef" :model="model">
       <wd-cell-group border>
         <wd-picker
-          label="入库类型"
-          placeholder="请选择入库类型"
+          label="出库类型"
+          placeholder="请选择出库类型"
           prop="warehouseType"
           v-model="model.warehouseType"
-          :columns="dictData.sys_warehouse_status"
-          :rules="[{ required: true, message: '请选择入库类型' }]"
+          :columns="dictData.out_warehouse_status"
+          :rules="[{ required: true, message: '请选择出库类型' }]"
         />
-        <wd-picker
-          v-if="model.warehouseType === '采购入库'"
-          disabled
-          label="供应商"
-          placeholder="请选择供应商"
-          prop="supplier"
-          v-model="model.supplier"
-          :columns="dictData.base_supplier"
-        />
+        <wd-input
+          v-if="model.warehouseType === '生产领料出库'"
+          label="出库工单"
+          prop="workOrderCode"
+          v-model="model.workOrderCode"
+        >
+          <template #suffix>
+            <wd-button size="small" type="success" @click="addProduct">添加</wd-button>
+          </template>
+        </wd-input>
+        <wd-input
+          v-else-if="model.warehouseType === '销售出库'"
+          label="销售订单"
+          prop="salesOrderCode"
+          v-model="model.salesOrderCode"
+        >
+          <template #suffix>
+            <wd-button size="small" type="success" @click="addSales">添加</wd-button>
+          </template>
+        </wd-input>
+
         <!-- <wd-calendar
-          label="入库时间"
-          placeholder="请选择入库时间"
+          label="出库时间"
+          placeholder="请选择出库时间"
           prop="warehouseDate"
           v-model="model.warehouseDate"
         /> -->
@@ -51,8 +63,7 @@
       </template> -->
       <wd-cell-group>
         <wd-cell title="产品编号" :value="item.productName" />
-        <wd-cell title="入库数量" :value="item.inStoreQty" />
-        <wd-cell title="当前库存数量" :value="item.inStoreQty" />
+        <wd-cell title="出库数量" :value="item.outStoreQty" />
       </wd-cell-group>
     </wd-card>
 
@@ -65,7 +76,7 @@
               <wd-button size="small" type="success" @click="addProduct">添加</wd-button>
             </template> -->
           </wd-input>
-          <wd-input label="入库数量" disabled v-model="detail.inStoreQty" />
+          <wd-input label="出库数量" disabled v-model="detail.outStoreQty" />
           <wd-picker
             label="仓库"
             placeholder="请选择仓库"
@@ -98,7 +109,8 @@
         </view>
       </template>
     </wd-fab>
-    <SelectProduct v-model="showProduct" @select="addProductData" />
+    <SelectWordOrder v-model="showProduct" @select="addProductData" />
+    <SelectSalesOrder v-model="showSales" @select="addSalesData" />
     <view class="fixed-bottom">
       <wd-button type="success" block @click="onSave">保存</wd-button>
       <!-- <view class="flex justify-center">
@@ -106,6 +118,9 @@
         <wd-button type="success" block @click="onSave">保存</wd-button>
       </view> -->
     </view>
+    <!-- #ifdef H5 -->
+    <view id="reader" style="width: 300px; margin: 20px auto"></view>
+    <!-- #endif -->
   </view>
 </template>
 
@@ -113,24 +128,29 @@
 import { Html5QrcodeScanner, Html5QrcodeScanType } from 'html5-qrcode'
 import { getRecordCheckApi } from '@/api/record/record'
 import { getWareHouseListApi } from '@/api/base/warehouse'
-import { scanWarehouseApi } from '@/api/warehouse/inWarehouse'
+import { scanWarehouseApi } from '@/api/warehouse/outWarehouse'
 import { getPositionListApi } from '@/api/base/position'
-import SelectProduct from '@/components/Product/SelectProduct.vue'
+import SelectWordOrder from '@/components/WordOrder/SelectWordOrder.vue'
+import SelectSalesOrder from '@/components/SalesOrder/SelectSalesOrder.vue'
 const model = reactive({
   warehouseType: '',
   warehouseDate: null,
   remark: '',
   supplier: '',
+  workOrderId: '',
+  workOrderCode: '',
+  salesOrderId: '',
+  salesOrderCode: '',
 })
 
-const { dictData } = useDictData(['base_supplier', 'sys_warehouse_status'])
+const { dictData } = useDictData(['base_supplier', 'out_warehouse_status'])
 const detailList = ref([])
 
 const detail = reactive({
   productName: '',
   productCode: '',
   productStandard: '',
-  inStoreQty: '',
+  outStoreQty: '',
   wareCode: '',
   bsId: '',
   recordId: '',
@@ -162,11 +182,11 @@ function onSave() {
     supplier: model.supplier,
     wareWarehouseDetailList: detailList.value,
     ext: {},
-    warehouseType: model.warehouseType,
+    outWarehouseType: model.warehouseType,
   }
   scanWarehouseApi(params).then((res) => {
     uni.showToast({
-      title: '入库成功',
+      title: '出库成功',
       icon: 'success',
     })
     setTimeout(() => {
@@ -182,23 +202,23 @@ function onSave() {
 function scanClick() {
   if (!model.warehouseType) {
     uni.showToast({
-      title: '请选择入库类型',
+      title: '请选择出库类型',
       icon: 'none',
     })
     return
   }
   // #ifdef H5
-  // const config = {
-  //   fps: 10,
-  //   qrbox: { width: 100, height: 100 },
-  //   rememberLastUsedCamera: true,
-  //   // Only support camera scan type.
-  //   supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-  // }
-  // console.log(1231, config)
-  // const html5QrcodeScanner = new Html5QrcodeScanner('reader', config, /* verbose= */ false)
-  // html5QrcodeScanner.render(onScanSuccess)
-  onScanSuccess('447886085761024')
+  const config = {
+    fps: 10,
+    qrbox: { width: 100, height: 100 },
+    rememberLastUsedCamera: true,
+    // Only support camera scan type.
+    supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+  }
+  console.log(1231, config)
+  const html5QrcodeScanner = new Html5QrcodeScanner('reader', config, /* verbose= */ false)
+  html5QrcodeScanner.render(onScanSuccess)
+  // onScanSuccess('447886085761024')
   // #endif
   // #ifndef H5
   // 允许从相机和相册扫码
@@ -217,17 +237,23 @@ function onScanSuccess(id) {
   getRecordCheckApi({
     id,
     source: model.warehouseType,
-    type: '入库',
+    type: '出库',
     associationCode: buyAssociationId.value,
   }).then((res) => {
     const { productName, productCode, num, id, productId, unit, supplier, associationId } = res.data
+    let _bsId = associationId
+    if (model.warehouseType === '生产领料出库') {
+      _bsId = model.workOrderId
+    } else if (model.warehouseType === '销售出库') {
+      _bsId = model.salesOrderId
+    }
     buyAssociationId.value = associationId
     model.supplier = supplier
     detail.productName = productName
     detail.productCode = productCode
-    detail.inStoreQty = num
+    detail.outStoreQty = num
     detail.recordId = id
-    detail.bsId = associationId
+    detail.bsId = _bsId
     detail.productId = productId
     detail.unit = unit
     showDetail.value = true
@@ -239,9 +265,11 @@ function addProduct() {
   showProduct.value = true
 }
 function addProductData(item) {
-  detail.productName = item.productName
-  detail.productCode = item.productCode
-  detail.productStandard = item.productStandard
+  console.log(item)
+
+  const { id, workOrderCode } = item
+  model.workOrderId = id
+  model.workOrderCode = workOrderCode || ''
   showProduct.value = false
 }
 const positionList = ref([])
@@ -278,6 +306,17 @@ function saveDetail() {
     .catch((error) => {
       console.log(error, 'error')
     })
+}
+
+const showSales = ref(false)
+function addSales() {
+  showSales.value = true
+}
+function addSalesData(item) {
+  const { id, salesOrderCode } = item
+  model.salesOrderId = id
+  model.salesOrderCode = salesOrderCode || ''
+  showSales.value = false
 }
 </script>
 

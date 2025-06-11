@@ -17,8 +17,10 @@ interface NavigateToOptions {
        "/pages-sub/inWarehouse/edit" |
        "/pages-sub/inWarehouse/list" |
        "/pages-sub/login/index" |
+       "/pages-sub/outWarehouse/edit" |
        "/pages-sub/outWarehouse/list" |
        "/pages-sub/warehouse/list" |
+       "/pages-sub/workOrder/detail" |
        "/pages-sub/device/plan/list";
 }
 interface RedirectToOptions extends NavigateToOptions {}

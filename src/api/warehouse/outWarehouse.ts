@@ -34,3 +34,10 @@ export function updateOutApi(data) {
 export function delOutApi(id) {
   return http.delete<any>('/warehouse/out/' + id)
 }
+
+/**
+ * 扫码出库
+ */
+export function scanWarehouseApi(data) {
+  return http.post<any>('/warehouse/out/scanWarehouse', data)
+}

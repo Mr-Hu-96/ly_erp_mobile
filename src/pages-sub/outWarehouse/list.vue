@@ -56,11 +56,22 @@
         </wd-cell-group>
       </wd-card>
     </z-paging>
+    <wd-fab :gap="{ bottom: 80, right: 15 }" :expandable="false">
+      <template #trigger>
+        <view
+          class="w-[40px] h-[40px] bg-[#0083ff] rounded-full flex items-center justify-center"
+          @click="scanClick"
+        >
+          <wd-icon name="add" size="22px" color="#fff"></wd-icon>
+        </view>
+      </template>
+    </wd-fab>
   </view>
 </template>
 
 <script lang="ts" setup>
 import { listOutApi } from '@/api/warehouse/outWarehouse'
+import { navigate } from '@/utils/navigate'
 const dataList = ref([])
 const paging = ref(null)
 function queryList(pageNum, pageSize) {
@@ -98,6 +109,10 @@ const querySubmit = () => {
 }
 function handleSearch() {
   paging.value.reload()
+}
+
+function scanClick() {
+  navigate.push('/pages-sub/outWarehouse/edit')
 }
 </script>
 

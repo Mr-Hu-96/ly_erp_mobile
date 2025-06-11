@@ -34,3 +34,10 @@ export function updateWorkDetailApi(data) {
 export function delWorkDetailApi(id) {
   return http.delete<any>('/produce/workDetail/' + id)
 }
+
+/**
+ * 查询工单明细列表
+ */
+export function noPageListWorkDetailApi(data) {
+  return http.get<any>('/produce/workDetail/noPageList', data)
+}

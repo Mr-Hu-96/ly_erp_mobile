@@ -49,7 +49,11 @@
           </template>
         </wd-search>
       </template>
-      <wd-card v-for="(item, index) in dataList" :key="index">
+      <wd-card
+        v-for="(item, index) in dataList"
+        :key="index"
+        @click="navigate.push('/pages-sub/workOrder/detail', { id: item.id })"
+      >
         <template #title>
           <view class="w-full flex justify-between items-center">
             <view class="font-bold">{{ item.WorkOrderCode }}</view>
@@ -113,6 +117,7 @@
 <script lang="ts" setup>
 import { listWorkOrderApi } from '@/api/produce/workOrder'
 import { toFixedWithLimit } from '@/utils/index'
+import { navigate } from '@/utils/navigate'
 const dataList = ref([])
 const paging = ref(null)
 function queryList(pageNum, pageSize) {

@@ -70,9 +70,6 @@
         </view>
       </template>
     </wd-fab>
-    <!-- #ifdef H5 -->
-    <view id="reader" style="width: 300px; margin: 20px auto"></view>
-    <!-- #endif -->
   </view>
 </template>
 
