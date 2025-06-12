@@ -55,25 +55,78 @@
         <text>计划数：{{ item.planQty }}</text>
       </view>
       <template #footer>
-        <wd-button size="small">报工</wd-button>
+        <wd-button size="small" @click="initReport(item)">报工</wd-button>
       </template>
     </wd-card>
+    <Add v-model="showReport" ref="addReportRef" @confirm="addReportData" />
   </view>
 </template>
 
 <script lang="ts" setup>
 import { getWorkOrderApi } from '@/api/produce/workOrder'
 import { noPageListWorkDetailApi } from '@/api/produce/workDetail'
+import { addReportApi } from '@/api/produce/report'
+import Add from '@/components/ReportWork/Add.vue'
 const workOrderData = ref<any>({})
 const workDetailList = ref<any>([])
+const workOrderId = ref(0)
 onLoad((option) => {
-  getWorkOrderApi(option.id).then((res) => {
+  workOrderId.value = option.id
+  initData(workOrderId.value)
+})
+
+function initData(id) {
+  getWorkOrderApi(id).then((res) => {
     workOrderData.value = res.data
   })
-  noPageListWorkDetailApi({ workOrderId: option.id }).then((res) => {
+  noPageListWorkDetailApi({ workOrderId: id }).then((res) => {
     workDetailList.value = res.data
   })
-})
+}
+const showReport = ref(false)
+const addReportRef = ref()
+function initReport(row) {
+  console.log(row, workOrderData.value)
+  showReport.value = true
+  if (addReportRef.value) {
+    addReportRef.value.initData(row, workOrderData.value)
+  }
+}
+function addReportData(data) {
+  console.log(data)
+  const { defectList, standardProgressTime, ...formData } = JSON.parse(JSON.stringify(data))
+  const { alreadyQty, goodQty, noGoodQty, planQty } = formData
+  if (goodQty + noGoodQty > planQty - alreadyQty) {
+    return uni.showToast({
+      title: '请勿填写超出计划数减已报工数！',
+      icon: 'error',
+    })
+  }
+  // const params = {
+  //   defectList,
+  //   formData,
+  //   standardProgressTime,
+  // }
+  const params = { ...formData, produceReportExt: {} }
+  params.defectList = defectList.map((item) => {
+    const { defectItemName, defectItemCode, qty } = item
+    return { defectItemName, defectItemCode, qty }
+  })
+  params.standard =
+    standardProgressTime.hour +
+    '小时' +
+    standardProgressTime.min +
+    '分' +
+    standardProgressTime.sec +
+    '秒'
+  addReportApi(params).then((response) => {
+    uni.showToast({
+      title: '新增成功',
+      icon: 'success',
+    })
+    showReport.value = false
+  })
+}
 </script>
 
 <style lang="scss" scoped></style>

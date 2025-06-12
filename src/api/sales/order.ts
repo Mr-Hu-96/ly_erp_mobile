@@ -34,3 +34,10 @@ export function updateOrderApi(data) {
 export function delOrderApi(id) {
   return http.delete<any>('/sales/order/' + id)
 }
+
+/**
+ * 首页-获取订单状态列表
+ */
+export function getOrderStatusApi() {
+  return http.get<any>('/sales/order/getOrderStatus')
+}

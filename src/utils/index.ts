@@ -233,3 +233,55 @@ export function formatDateFormat(format: string): string {
 
   return formattedDate
 }
+
+/**
+ * 解析时分字符串，返回小时和分钟的数值
+ * @param timeString 格式为 "HH:mm" 的字符串，例如 "09:01"
+ * @returns 包含小时和分钟的对象 { hours: number, minutes: number }
+ * @throws 如果输入格式无效会抛出错误
+ */
+export function parseTimeString(timeString: string): { hours: number; minutes: number } {
+  // 验证输入格式
+  const timeRegex = /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/
+  if (!timeRegex.test(timeString)) {
+    console.error('无效的时间格式，请使用 "HH:mm" 格式，例如 "09:01"')
+    return { hours: 0, minutes: 0 }
+  }
+
+  // 分割字符串
+  const [hoursStr, minutesStr] = timeString.split(':')
+
+  // 转换为数字（会自动去掉前导零）
+  const hours = parseInt(hoursStr, 10)
+  const minutes = parseInt(minutesStr, 10)
+
+  return { hours, minutes }
+}
+
+/**
+ * 计算两个日期时间之间的差值，返回hh:mm格式
+ * @param startDate 开始时间字符串，格式 'YYYY-MM-DD HH:mm'
+ * @param endDate 结束时间字符串，格式 'YYYY-MM-DD HH:mm'
+ * @returns 时间差字符串，格式 'hh:mm'
+ */
+export function calcDate(startDate: string, endDate: string): string {
+  // 1. 将日期字符串转换为Date对象
+  const start = new Date(startDate.replace(' ', 'T') + ':00')
+  const end = new Date(endDate.replace(' ', 'T') + ':00')
+
+  // 2. 计算时间差（毫秒）
+  const diffInMs = end.getTime() - start.getTime()
+
+  // 3. 检查开始时间是否早于结束时间
+  if (diffInMs < 0) {
+    throw new Error('结束时间不能早于开始时间')
+  }
+
+  // 4. 转换为小时和分钟
+  const diffInMinutes = Math.floor(diffInMs / (1000 * 60))
+  const hours = Math.floor(diffInMinutes / 60)
+  const minutes = diffInMinutes % 60
+
+  // 5. 格式化为hh:mm
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
+}
