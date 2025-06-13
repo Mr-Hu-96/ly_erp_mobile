@@ -49,7 +49,11 @@
           </template>
         </wd-search>
       </template>
-      <wd-card v-for="(item, index) in dataList" :key="index">
+      <wd-card
+        v-for="(item, index) in dataList"
+        :key="index"
+        @click="navigate.push('/pages-sub/workOrder/taskDetail', { id: item.id })"
+      >
         <template #title>
           <view class="w-full flex justify-between items-center">
             <view class="font-bold">{{ item.WorkOrderCode }}</view>
@@ -108,10 +112,21 @@
         ></wd-select-picker> -->
       </wd-card>
     </z-paging>
+    <wd-fab :gap="{ bottom: 80, right: 15 }" :z-index="1" :expandable="false">
+      <template #trigger>
+        <view
+          class="w-[40px] h-[40px] bg-[#0083ff] rounded-full flex items-center justify-center"
+          @click="scanClick"
+        >
+          <wd-icon name="scan" size="22px" color="#fff"></wd-icon>
+        </view>
+      </template>
+    </wd-fab>
   </view>
 </template>
 
 <script lang="ts" setup>
+import { navigate } from '@/utils/navigate'
 import { listWorkDetailApi } from '@/api/produce/workDetail'
 const dataList = ref([])
 const paging = ref(null)
@@ -206,6 +221,34 @@ const columnsPe = ref<Record<string, any>>([
     label: '乔巴',
   },
 ])
+function scanClick() {
+  // #ifdef H5
+  // const config = {
+  //   fps: 10,
+  //   qrbox: { width: 100, height: 100 },
+  //   rememberLastUsedCamera: true,
+  //   // Only support camera scan type.
+  //   supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+  // }
+  // console.log(1231, config)
+  // const html5QrcodeScanner = new Html5QrcodeScanner('reader', config, /* verbose= */ false)
+  // html5QrcodeScanner.render(onScanSuccess)
+  onScanSuccess('447796946071040')
+  // #endif
+  // #ifndef H5
+  // 允许从相机和相册扫码
+  uni.scanCode({
+    success: function (res) {
+      console.log('条码类型：' + res.scanType)
+      console.log('条码内容：' + res.result)
+      onScanSuccess(res.result)
+    },
+  })
+  // #endif
+  function onScanSuccess(result) {
+    navigate.push('/pages-sub/workOrder/taskDetail', { id: result })
+  }
+}
 </script>
 
 <style></style>

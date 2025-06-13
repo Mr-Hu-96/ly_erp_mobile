@@ -21,6 +21,7 @@ interface NavigateToOptions {
        "/pages-sub/outWarehouse/list" |
        "/pages-sub/warehouse/list" |
        "/pages-sub/workOrder/detail" |
+       "/pages-sub/workOrder/taskDetail" |
        "/pages-sub/device/plan/list";
 }
 interface RedirectToOptions extends NavigateToOptions {}

@@ -272,7 +272,7 @@ function initData(processData, workOrderData) {
       calcGuessPrice()
     })
   }
-  const { productCode, productName, productStandard } = workOrderData
+  const { productCode, productName, productStandard, workOrderCode } = workOrderData
   model.workOrderId = workOrderData.id
   model.processId = processId
   model.workOrderDetailId = id
@@ -282,7 +282,7 @@ function initData(processData, workOrderData) {
   model.productStandard = productStandard
 
   showData.value = {
-    workOrderCode: workOrderData.workOrderCode,
+    workOrderCode,
     processName,
   }
 }

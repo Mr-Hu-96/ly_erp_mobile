@@ -41,3 +41,10 @@ export function delWorkDetailApi(id) {
 export function noPageListWorkDetailApi(data) {
   return http.get<any>('/produce/workDetail/noPageList', data)
 }
+
+/**
+ * 查询任务明细列表
+ */
+export function getWorkTaskDetailApi(id) {
+  return http.get<any>('/produce/workDetail/' + id)
+}

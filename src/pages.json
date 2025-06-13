@@ -197,6 +197,14 @@
           }
         },
         {
+          "path": "workOrder/taskDetail",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "报工列表"
+          }
+        },
+        {
           "path": "device/plan/list",
           "type": "page",
           "layout": "default",
