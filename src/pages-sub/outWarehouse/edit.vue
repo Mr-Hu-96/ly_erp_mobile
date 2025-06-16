@@ -299,7 +299,7 @@ function saveDetail() {
     .validate()
     .then(({ valid, errors }) => {
       if (valid) {
-        detailList.value.push(detail)
+        detailList.value.push(JSON.parse(JSON.stringify(detail)))
         showDetail.value = false
       }
     })
