@@ -56,17 +56,14 @@
       >
         <template #title>
           <view class="w-full flex justify-between items-center">
-            <view class="font-bold">{{ item.WorkOrderCode }}</view>
+            <view class="font-bold">{{ item.workOrderCode }}</view>
             <!-- <view>
               <wd-tag custom-class="space" type="danger">加急</wd-tag>
               <text class="text-green-600">进行中</text>
             </view> -->
           </view>
         </template>
-        <view class="flex justify-between">
-          <text>工单编号</text>
-          <text>{{ item.workOrderCode }}</text>
-        </view>
+
         <view class="flex justify-between py-1">
           <text>产品编号</text>
           <text class="text-blue-600">{{ item.productCode }}</text>
@@ -79,6 +76,11 @@
           <text>产品规格</text>
           <text>{{ item.productStandard }}</text>
         </view>
+        <view class="flex justify-between py-1">
+          <text>工序名称</text>
+          <text>{{ item.processName }}</text>
+        </view>
+
         <view class="flex justify-between py-1">
           <text>计划结束时间</text>
           <text>{{ item.planEndDate }}</text>

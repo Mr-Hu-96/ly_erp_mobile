@@ -12,7 +12,7 @@
     <wd-card>
       <template #title>
         <view class="w-full flex justify-between items-center">
-          <view class="font-bold">{{ workOrderData.WorkOrderCode }}</view>
+          <view class="font-bold">{{ workOrderData.workOrderCode }}</view>
           <view>
             <!-- <wd-tag custom-class="space" type="danger">加急</wd-tag> -->
             <text v-if="workOrderData.status == '未开始'" class="text-green-600">
@@ -28,10 +28,7 @@
           </view>
         </view>
       </template>
-      <view class="flex justify-between">
-        <text>工单编号</text>
-        <text>{{ workOrderData.workOrderCode }}</text>
-      </view>
+
       <view class="flex justify-between py-1">
         <text>产品编号</text>
         <text class="text-blue-600">{{ workOrderData.productCode }}</text>
@@ -81,7 +78,7 @@ function initData(id) {
   listWorkDetailApi({ id }).then((res) => {
     workOrderData.value = res.rows[0] ? res.rows[0] : {}
     if (workOrderData.value.processCode) {
-      listReportApi({ processCode: workOrderData.value.processCode }).then((res) => {
+      listReportApi({ workOrderDetailId: workOrderId.value }).then((res) => {
         reportList.value = res.rows
       })
     }

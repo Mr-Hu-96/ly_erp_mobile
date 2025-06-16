@@ -2,7 +2,6 @@
 <route lang="json5" type="home">
 {
   style: {
-    navigationStyle: 'custom',
     navigationBarTitleText: '工单',
   },
 }
@@ -56,7 +55,7 @@
       >
         <template #title>
           <view class="w-full flex justify-between items-center">
-            <view class="font-bold">{{ item.WorkOrderCode }}</view>
+            <view class="font-bold">{{ item.workOrderCode }}</view>
             <view>
               <!-- <wd-tag custom-class="space" type="danger">加急</wd-tag> -->
               <text v-if="item.status == '未开始'" class="text-green-600">{{ item.status }}</text>
@@ -70,10 +69,7 @@
             </view>
           </view>
         </template>
-        <view class="flex justify-between">
-          <text>工单编号</text>
-          <text>{{ item.workOrderCode }}</text>
-        </view>
+
         <view class="flex justify-between py-1">
           <text>产品编号</text>
           <text class="text-blue-600">{{ item.productCode }}</text>

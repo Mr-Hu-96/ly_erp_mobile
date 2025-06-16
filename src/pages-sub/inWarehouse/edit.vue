@@ -198,7 +198,7 @@ function scanClick() {
   // console.log(1231, config)
   // const html5QrcodeScanner = new Html5QrcodeScanner('reader', config, /* verbose= */ false)
   // html5QrcodeScanner.render(onScanSuccess)
-  onScanSuccess('447886085761024')
+  onScanSuccess('448014953417984')
   // #endif
   // #ifndef H5
   // 允许从相机和相册扫码
@@ -271,7 +271,7 @@ function saveDetail() {
     .validate()
     .then(({ valid, errors }) => {
       if (valid) {
-        detailList.value.push(detail)
+        detailList.value.push(JSON.parse(JSON.stringify(detail)))
         showDetail.value = false
       }
     })

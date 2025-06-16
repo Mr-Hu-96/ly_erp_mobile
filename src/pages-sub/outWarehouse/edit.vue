@@ -20,7 +20,7 @@
           :rules="[{ required: true, message: '请选择出库类型' }]"
         />
         <wd-input
-          v-if="model.warehouseType === '生产领料出库'"
+          v-if="model.warehouseType === '生产领料'"
           label="出库工单"
           prop="workOrderCode"
           v-model="model.workOrderCode"
@@ -208,17 +208,17 @@ function scanClick() {
     return
   }
   // #ifdef H5
-  const config = {
-    fps: 10,
-    qrbox: { width: 100, height: 100 },
-    rememberLastUsedCamera: true,
-    // Only support camera scan type.
-    supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-  }
-  console.log(1231, config)
-  const html5QrcodeScanner = new Html5QrcodeScanner('reader', config, /* verbose= */ false)
-  html5QrcodeScanner.render(onScanSuccess)
-  // onScanSuccess('447886085761024')
+  // const config = {
+  //   fps: 10,
+  //   qrbox: { width: 100, height: 100 },
+  //   rememberLastUsedCamera: true,
+  //   // Only support camera scan type.
+  //   supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+  // }
+  // console.log(1231, config)
+  // const html5QrcodeScanner = new Html5QrcodeScanner('reader', config, /* verbose= */ false)
+  // html5QrcodeScanner.render(onScanSuccess)
+  onScanSuccess('448014953417984')
   // #endif
   // #ifndef H5
   // 允许从相机和相册扫码
@@ -242,7 +242,7 @@ function onScanSuccess(id) {
   }).then((res) => {
     const { productName, productCode, num, id, productId, unit, supplier, associationId } = res.data
     let _bsId = associationId
-    if (model.warehouseType === '生产领料出库') {
+    if (model.warehouseType === '生产领料') {
       _bsId = model.workOrderId
     } else if (model.warehouseType === '销售出库') {
       _bsId = model.salesOrderId
