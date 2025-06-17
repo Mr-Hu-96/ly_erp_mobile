@@ -243,11 +243,17 @@ function scanClick() {
 
 function onScanSuccess(id) {
   // any error handling
+  let _associationCode = ''
+  if (model.warehouseType === '生产领料') {
+    _associationCode = model.workOrderId
+  } else if (model.warehouseType === '销售出库') {
+    _associationCode = model.salesOrderId
+  }
   getRecordCheckApi({
     id,
     source: model.warehouseType,
     type: '出库',
-    associationCode: buyAssociationId.value,
+    associationCode: _associationCode,
   }).then((res) => {
     const { productName, productCode, num, id, productId, unit, supplier, associationId } = res.data
     let _bsId = associationId
