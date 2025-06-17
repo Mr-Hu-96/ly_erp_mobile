@@ -40,6 +40,11 @@
             <image class="w-24px h-24px" src="/static/images/in.png" />
           </template>
         </wd-grid-item>
+        <wd-grid-item use-icon-slot url="/pages-sub/warehouse/check" text="来料检验">
+          <template #icon>
+            <image class="w-24px h-24px" src="/static/images/check.png" />
+          </template>
+        </wd-grid-item>
         <wd-grid-item use-icon-slot url="/pages-sub/device/plan/list" text="点检保养单">
           <template #icon>
             <image class="w-24px h-24px" src="/static/images/total.png" />

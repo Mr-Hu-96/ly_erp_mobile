@@ -55,7 +55,7 @@
           clearable
           prop="remark"
         />
-        <wd-input label="扫描单" v-model="scanCode" @confirm="onScanSuccess(scanCode)">
+        <wd-input label="条码扫描" v-model="scanCode" @confirm="onScanSuccess(scanCode)">
           <template #suffix>
             <wd-button size="small" type="success" @click="onScanSuccess(scanCode)">添加</wd-button>
           </template>
@@ -317,7 +317,7 @@ function saveDetail() {
     .validate()
     .then(({ valid, errors }) => {
       if (valid) {
-        detailList.value.push(JSON.parse(JSON.stringify(detail)))
+        detailList.value.unshift(JSON.parse(JSON.stringify(detail)))
         showDetail.value = false
       }
     })

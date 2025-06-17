@@ -4,17 +4,20 @@
       <view class="text-center font-bold lh-10">报工</view>
       <view style="height: 80vh" class="bg-[#edf2fa]">
         <wd-form ref="form" :model="model" :rules="rules">
-          <wd-cell-group custom-class="group" title="基础信息" border>
-            <wd-cell title="工单编号" :value="showData.workOrderCode" />
-            <wd-cell title="工序名称" :value="showData.processName" />
-            <wd-cell title="工序进度" :value="model.processProgress" />
-            <wd-cell title="产品编号" :value="model.productCode" />
-            <wd-cell title="产品名称" :value="model.productName" />
-            <wd-cell title="产品规格" :value="model.productStandard" />
-            <wd-cell title="计划数" :value="model.planQty" />
-            <wd-cell title="已报工数" :value="model.alreadyQty" />
-            <wd-cell title="报工数" :value="model.reportQty" />
-          </wd-cell-group>
+          <view class="pb-4">
+            <wd-cell-group custom-class="group" title="基础信息" border>
+              <wd-cell title="工单编号" :value="showData.workOrderCode" />
+              <wd-cell title="工序名称" :value="showData.processName" />
+              <wd-cell title="工序进度" :value="model.processProgress" />
+              <wd-cell title="产品编号" :value="model.productCode" />
+              <wd-cell title="产品名称" :value="model.productName" />
+              <wd-cell title="产品规格" :value="model.productStandard" />
+              <wd-cell title="计划数" :value="model.planQty" />
+              <wd-cell title="已报工数" :value="model.alreadyQty" />
+              <wd-cell title="报工数" :value="model.reportQty" />
+            </wd-cell-group>
+          </view>
+
           <wd-cell-group custom-class="group" title="报工数据" border>
             <wd-picker
               label="工序状态"
@@ -30,34 +33,14 @@
               v-model="model.productUser"
               :columns="dictData.sys_user"
             />
-
-            <WdDatetimePickerCustom
-              prop="startDate"
-              v-model="model.startDate"
-              label="开始时间"
-              format="YYYY-MM-DD HH:mm"
-              @confirm="confirmDate"
-            />
-            <WdDatetimePickerCustom
-              prop="endDate"
-              v-model="model.endDate"
-              label="结束时间"
-              format="YYYY-MM-DD HH:mm"
-              @confirm="confirmDate"
-            />
-            <wd-cell title="报工时长" :value="model.reportDurationHour" />
-            <!-- <wd-datetime-picker type="time" v-model="model.reportDurationHour" label="报工时长" /> -->
-            <wd-picker
-              label="单位"
-              placeholder="请选择单位"
-              prop="unit"
-              v-model="model.unit"
-              :columns="dictData.base_unit"
-            />
-
             <wd-cell title="良品数" title-width="33%" prop="goodQty">
               <view style="text-align: left">
-                <wd-input-number :min="0" v-model="model.goodQty" @change="updateGoodQty" />
+                <wd-input-number
+                  :min="0"
+                  input-width="100px"
+                  v-model="model.goodQty"
+                  @change="updateGoodQty"
+                />
               </view>
             </wd-cell>
             <wd-cell title="不良品数" :value="model.noGoodQty" />
@@ -84,6 +67,31 @@
                 </view>
               </view>
             </wd-cell>
+
+            <!-- <wd-datetime-picker type="time" v-model="model.reportDurationHour" label="报工时长" /> -->
+            <wd-picker
+              label="单位"
+              placeholder="请选择单位"
+              prop="unit"
+              v-model="model.unit"
+              :columns="dictData.base_unit"
+            />
+
+            <WdDatetimePickerCustom
+              prop="startDate"
+              v-model="model.startDate"
+              label="开始时间"
+              format="YYYY-MM-DD HH:mm"
+              @confirm="confirmDate"
+            />
+            <WdDatetimePickerCustom
+              prop="endDate"
+              v-model="model.endDate"
+              label="结束时间"
+              format="YYYY-MM-DD HH:mm"
+              @confirm="confirmDate"
+            />
+            <wd-cell title="报工时长" :value="model.reportDurationHour" />
             <wd-cell title="标准效率" :value="standardProgress" />
             <wd-cell title="实际效率" :value="actualProgress" />
             <wd-cell title="达标率" :value="model.rateStandard" />
@@ -104,11 +112,16 @@
               :columns="['未审批', '已审批']"
             />
             <WdDatetimePickerCustom
+              v-if="model.approveStatus === '已审批'"
               prop="approveDate"
               v-model="model.approveDate"
               label="审批时间"
             />
-            <wd-cell title="审批人" :value="model.approveUser" />
+            <wd-cell
+              v-if="model.approveStatus === '已审批'"
+              title="审批人"
+              :value="model.approveUser"
+            />
           </wd-cell-group>
           <view class="footer p-2">
             <wd-button type="primary" size="large" @click="handleSubmit" block>提交</wd-button>
@@ -163,14 +176,14 @@ interface ProduceReport {
 }
 const model = reactive<ProduceReport>({
   actualProgress: 0,
-  alreadyQty: 1,
+  alreadyQty: 0,
   approveDate: '',
   approveStatus: '已审批',
   approveUser: userData.user.nickName,
   goodQty: 0,
   guessPrice: 0,
   noGoodQty: 0,
-  planQty: 1,
+  planQty: 0,
   priceType: '计件',
   processId: null,
   processProgress: '',

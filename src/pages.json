@@ -180,6 +180,14 @@
           }
         },
         {
+          "path": "warehouse/check",
+          "type": "page",
+          "layout": "default",
+          "style": {
+            "navigationBarTitleText": "来料检验"
+          }
+        },
+        {
           "path": "warehouse/list",
           "type": "page",
           "layout": "default",

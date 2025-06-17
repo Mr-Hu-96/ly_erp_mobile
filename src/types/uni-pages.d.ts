@@ -19,6 +19,7 @@ interface NavigateToOptions {
        "/pages-sub/login/index" |
        "/pages-sub/outWarehouse/edit" |
        "/pages-sub/outWarehouse/list" |
+       "/pages-sub/warehouse/check" |
        "/pages-sub/warehouse/list" |
        "/pages-sub/workOrder/detail" |
        "/pages-sub/workOrder/taskDetail" |
