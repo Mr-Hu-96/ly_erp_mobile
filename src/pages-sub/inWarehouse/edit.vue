@@ -35,11 +35,7 @@
           clearable
           prop="remark"
         />
-        <wd-input label="条码扫描" v-model="scanCode" @confirm="onScanSuccess(scanCode)">
-          <template #suffix>
-            <wd-button size="small" type="success" @click="onScanSuccess(scanCode)">添加</wd-button>
-          </template>
-        </wd-input>
+        <wd-input label="条码扫描" v-model="scanCode" @confirm="onScanSuccess(scanCode)"></wd-input>
         <wd-cell v-if="model.warehouseType === '采购入库'" title="供应商" :value="model.supplier" />
         <wd-cell
           v-if="model.warehouseType === '采购入库'"

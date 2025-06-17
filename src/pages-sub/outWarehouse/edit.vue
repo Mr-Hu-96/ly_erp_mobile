@@ -55,11 +55,7 @@
           clearable
           prop="remark"
         />
-        <wd-input label="条码扫描" v-model="scanCode" @confirm="onScanSuccess(scanCode)">
-          <template #suffix>
-            <wd-button size="small" type="success" @click="onScanSuccess(scanCode)">添加</wd-button>
-          </template>
-        </wd-input>
+        <wd-input label="条码扫描" v-model="scanCode" @confirm="onScanSuccess(scanCode)"></wd-input>
       </wd-cell-group>
     </wd-form>
     <wd-card v-for="item in detailList" :title="item.productName" :key="item.id">
