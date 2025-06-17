@@ -35,6 +35,11 @@
           clearable
           prop="remark"
         />
+        <wd-input label="扫描单" v-model="scanCode" @confirm="onScanSuccess(scanCode)">
+          <template #suffix>
+            <wd-button size="small" type="success" @click="onScanSuccess(scanCode)">添加</wd-button>
+          </template>
+        </wd-input>
         <wd-cell v-if="model.warehouseType === '采购入库'" title="供应商" :value="model.supplier" />
         <wd-cell
           v-if="model.warehouseType === '采购入库'"
@@ -273,6 +278,9 @@ function onScanSuccess(id) {
     detail.unit = unit
     detail.associationCode = associationCode
     showDetail.value = true
+    if (scanCode.value) {
+      scanCode.value = ''
+    }
   })
 }
 
@@ -322,6 +330,8 @@ function saveDetail() {
       console.log(error, 'error')
     })
 }
+
+const scanCode = ref('')
 </script>
 
 <style lang="scss" scoped>

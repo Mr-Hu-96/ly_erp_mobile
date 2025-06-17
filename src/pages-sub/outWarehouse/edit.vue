@@ -55,6 +55,11 @@
           clearable
           prop="remark"
         />
+        <wd-input label="扫描单" v-model="scanCode" @confirm="onScanSuccess(scanCode)">
+          <template #suffix>
+            <wd-button size="small" type="success" @click="onScanSuccess(scanCode)">添加</wd-button>
+          </template>
+        </wd-input>
       </wd-cell-group>
     </wd-form>
     <wd-card v-for="item in detailList" :title="item.productName" :key="item.id">
@@ -261,6 +266,9 @@ function onScanSuccess(id) {
     detail.productId = productId
     detail.unit = unit
     showDetail.value = true
+    if (scanCode.value) {
+      scanCode.value = ''
+    }
   })
 }
 
@@ -322,6 +330,8 @@ function addSalesData(item) {
   model.salesOrderCode = salesOrderCode || ''
   showSales.value = false
 }
+
+const scanCode = ref('')
 </script>
 
 <style lang="scss" scoped>
