@@ -266,10 +266,10 @@ function onScanSuccess(id) {
     detail.productId = productId
     detail.unit = unit
     showDetail.value = true
-    if (scanCode.value) {
-      scanCode.value = ''
-    }
   })
+  if (scanCode.value) {
+    scanCode.value = ''
+  }
 }
 
 const showProduct = ref(false)

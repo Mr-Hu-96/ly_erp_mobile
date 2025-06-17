@@ -278,10 +278,10 @@ function onScanSuccess(id) {
     detail.unit = unit
     detail.associationCode = associationCode
     showDetail.value = true
-    if (scanCode.value) {
-      scanCode.value = ''
-    }
   })
+  if (scanCode.value) {
+    scanCode.value = ''
+  }
 }
 
 const showProduct = ref(false)
