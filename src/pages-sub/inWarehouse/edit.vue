@@ -19,15 +19,7 @@
           :columns="dictData.sys_warehouse_status"
           :rules="[{ required: true, message: '请选择入库类型' }]"
         />
-        <wd-picker
-          v-if="model.warehouseType === '采购入库'"
-          disabled
-          label="供应商"
-          placeholder="请选择供应商"
-          prop="supplier"
-          v-model="model.supplier"
-          :columns="dictData.base_supplier"
-        />
+
         <!-- <wd-calendar
           label="入库时间"
           placeholder="请选择入库时间"
@@ -43,6 +35,12 @@
           clearable
           prop="remark"
         />
+        <wd-cell v-if="model.warehouseType === '采购入库'" title="供应商" :value="model.supplier" />
+        <wd-cell
+          v-if="model.warehouseType === '采购入库'"
+          title="订单编号"
+          :value="associationCode"
+        />
       </wd-cell-group>
     </wd-form>
     <wd-card v-for="item in detailList" :title="item.productName" :key="item.id">
@@ -50,7 +48,10 @@
         
       </template> -->
       <wd-cell-group>
-        <wd-cell title="产品编号" :value="item.productName" />
+        <wd-cell title="产品编号" :value="item.productCode" />
+        <wd-cell title="订单编号" :value="item.associationCode" />
+        <wd-cell title="仓库" :value="item.wareName" />
+        <wd-cell title="库位" :value="item.positionName" />
         <wd-cell title="入库数量" :value="item.inStoreQty" />
         <wd-cell title="当前库存数量" :value="item.inStoreQty" />
       </wd-cell-group>
@@ -60,12 +61,15 @@
       <view class="text-center font-bold lh-10">明细设置</view>
       <wd-form ref="detailFormRef" :model="detail">
         <wd-cell-group border>
-          <wd-input label="产品名称" disabled v-model="detail.productName">
+          <wd-cell title="订单编号" :value="detail.associationCode" />
+          <wd-cell title="产品名称" :value="detail.productName">
             <!-- <template #suffix>
               <wd-button size="small" type="success" @click="addProduct">添加</wd-button>
             </template> -->
-          </wd-input>
-          <wd-input label="入库数量" disabled v-model="detail.inStoreQty" />
+          </wd-cell>
+          <wd-cell title="产品编号" :value="detail.productCode" />
+
+          <wd-cell title="入库数量" :value="detail.inStoreQty" />
           <wd-picker
             label="仓库"
             placeholder="请选择仓库"
@@ -113,7 +117,11 @@
 import { Html5QrcodeScanner, Html5QrcodeScanType } from 'html5-qrcode'
 import { getRecordCheckApi } from '@/api/record/record'
 import { getWareHouseListApi } from '@/api/base/warehouse'
-import { scanWarehouseApi } from '@/api/warehouse/inWarehouse'
+import {
+  scanWarehouseApi,
+  getInWarehouseApi,
+  getInWarehouseDetailListApi,
+} from '@/api/warehouse/inWarehouse'
 import { getPositionListApi } from '@/api/base/position'
 import SelectProduct from '@/components/Product/SelectProduct.vue'
 const model = reactive({
@@ -127,6 +135,7 @@ const { dictData } = useDictData(['base_supplier', 'sys_warehouse_status'])
 const detailList = ref([])
 
 const detail = reactive({
+  associationCode: '',
   productName: '',
   productCode: '',
   productStandard: '',
@@ -141,6 +150,7 @@ const detail = reactive({
   wareName: '',
 })
 const buyAssociationId = ref('')
+const associationCode = ref('')
 const WareList = ref([])
 getWareHouseListApi({}).then((res) => {
   WareList.value = res.data.map((item) => {
@@ -155,6 +165,27 @@ const detailType = ref<'add' | 'edit'>('add')
 const addDetail = () => {
   detailType.value = 'add'
   showDetail.value = true
+}
+
+const warehouseId = ref('')
+onLoad((option) => {
+  if (option.warehouseId) {
+    warehouseId.value = option.warehouseId
+    initData(warehouseId.value)
+  }
+})
+
+function initData(warehouseId) {
+  getInWarehouseApi(warehouseId).then((res) => {
+    const { warehouseType, warehouseDate, remark, supplier } = res.data
+    model.warehouseType = warehouseType
+    model.warehouseDate = warehouseDate
+    model.remark = remark
+    model.supplier = supplier
+    getInWarehouseDetailListApi({ warehouseId }).then((res) => {
+      detailList.value = res.data
+    })
+  })
 }
 function onSave() {
   const params = {
@@ -220,7 +251,17 @@ function onScanSuccess(id) {
     type: '入库',
     associationCode: buyAssociationId.value,
   }).then((res) => {
-    const { productName, productCode, num, id, productId, unit, supplier, associationId } = res.data
+    const {
+      productName,
+      productCode,
+      num,
+      id,
+      productId,
+      unit,
+      supplier,
+      associationId,
+      associationCode,
+    } = res.data
     buyAssociationId.value = associationId
     model.supplier = supplier
     detail.productName = productName
@@ -230,6 +271,7 @@ function onScanSuccess(id) {
     detail.bsId = associationId
     detail.productId = productId
     detail.unit = unit
+    detail.associationCode = associationCode
     showDetail.value = true
   })
 }
@@ -271,6 +313,7 @@ function saveDetail() {
     .validate()
     .then(({ valid, errors }) => {
       if (valid) {
+        associationCode.value = detail.associationCode
         detailList.value.push(JSON.parse(JSON.stringify(detail)))
         showDetail.value = false
       }

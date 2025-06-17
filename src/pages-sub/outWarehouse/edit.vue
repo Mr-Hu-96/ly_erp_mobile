@@ -62,7 +62,9 @@
         
       </template> -->
       <wd-cell-group>
-        <wd-cell title="产品编号" :value="item.productName" />
+        <wd-cell title="产品编号" :value="item.productCode" />
+        <wd-cell title="仓库" :value="item.wareName" />
+        <wd-cell title="库位" :value="item.positionName" />
         <wd-cell title="出库数量" :value="item.outStoreQty" />
       </wd-cell-group>
     </wd-card>
@@ -71,11 +73,13 @@
       <view class="text-center font-bold lh-10">明细设置</view>
       <wd-form ref="detailFormRef" :model="detail">
         <wd-cell-group border>
-          <wd-input label="产品名称" disabled v-model="detail.productName">
-            <!-- <template #suffix>
+          <!-- <wd-input label="产品名称" disabled v-model="detail.productName">
+            <template #suffix>
               <wd-button size="small" type="success" @click="addProduct">添加</wd-button>
-            </template> -->
-          </wd-input>
+            </template>
+          </wd-input> -->
+          <wd-cell title="产品名称" :value="detail.productName" />
+          <wd-cell title="产品编号" :value="detail.productCode" />
           <wd-input label="出库数量" disabled v-model="detail.outStoreQty" />
           <wd-picker
             label="仓库"
@@ -218,7 +222,7 @@ function scanClick() {
   // console.log(1231, config)
   // const html5QrcodeScanner = new Html5QrcodeScanner('reader', config, /* verbose= */ false)
   // html5QrcodeScanner.render(onScanSuccess)
-  onScanSuccess('448014953417984')
+  onScanSuccess('448015561624576')
   // #endif
   // #ifndef H5
   // 允许从相机和相册扫码

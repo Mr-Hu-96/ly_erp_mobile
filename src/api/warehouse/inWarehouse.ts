@@ -41,3 +41,10 @@ export function delInWarehouseApi(id) {
 export function scanWarehouseApi(data) {
   return http.post<any>('/warehouse/inWarehouse/scanWarehouse', data)
 }
+
+/**
+ * 查询inWarehouse 明细记录列表
+ */
+export function getInWarehouseDetailListApi(data) {
+  return http.get<any>('/warehouseDetail/detail/list', data)
+}
