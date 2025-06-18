@@ -133,6 +133,7 @@ function onScanSuccess(id) {
   if (id) {
     const exists = detailList.value.some((item) => item.id === Number(id))
     if (exists) {
+      scanCode.value = ''
       return uni.showToast({
         title: '已存在标签',
         icon: 'none',
