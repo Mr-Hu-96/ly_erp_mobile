@@ -28,7 +28,6 @@
         
       </template> -->
       <wd-cell-group>
-        <wd-cell title="产品名称" :value="item.productName" />
         <wd-cell title="产品编号" :value="item.productCode" />
         <wd-cell title="订单编号" :value="item.associationCode" />
         <wd-cell title="产品数量" :value="item.num" />
@@ -134,9 +133,10 @@ function onScanSuccess(id) {
   }
   scanCheckApi({
     labelId: id,
-    associationId: model.associationId,
+    associationCode: model.associationCode,
   }).then((res) => {
     const _data = { ...res.data }
+    _data.labelId = id
     if (!model.associationCode) {
       model.associationCode = _data.associationCode
       model.associationId = _data.associationId
