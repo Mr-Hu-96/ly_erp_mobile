@@ -145,6 +145,7 @@ function onScanSuccess(id) {
   }).then((res) => {
     const _data = { ...res.data }
     _data.labelId = id
+    _data.status = model.status
     if (!model.associationCode) {
       model.associationCode = _data.associationCode
       model.associationId = _data.associationId
