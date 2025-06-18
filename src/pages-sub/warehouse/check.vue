@@ -23,34 +23,42 @@
         <wd-input label="条码扫描" v-model="scanCode" @confirm="onScanSuccess(scanCode)"></wd-input>
       </wd-cell-group>
     </wd-form>
-    <wd-card v-for="item in detailList" :title="item.productName" :key="item.id">
-      <!-- <template v-slot:title>
+    <wd-swipe-action v-for="(item, index) in detailList" :key="item.id">
+      <wd-card :title="item.productName">
+        <!-- <template v-slot:title>
         
       </template> -->
-      <wd-cell-group>
-        <wd-cell title="产品编号" :value="item.productCode" />
-        <wd-cell title="订单编号" :value="item.associationCode" />
-        <wd-cell title="产品数量" :value="item.num" />
+        <wd-cell-group>
+          <wd-cell title="产品编号" :value="item.productCode" />
+          <wd-cell title="订单编号" :value="item.associationCode" />
+          <wd-cell title="产品数量" :value="item.num" />
 
-        <wd-input v-if="model.status == '不合格'" label="不合格原因" v-model="item.reason">
-          <template #suffix>
-            <wd-picker
-              :columns="dictData.warehouse_check_reason"
-              v-model="item.reason"
-              use-default-slot
-            >
-              <wd-button size="small">选择</wd-button>
-            </wd-picker>
-          </template>
-        </wd-input>
-        <wd-picker
-          v-if="model.status == '不合格'"
-          :columns="dictData.warehouse_check_method"
-          label="处理方式"
-          v-model="item.processingMethod"
-        />
-      </wd-cell-group>
-    </wd-card>
+          <wd-input v-if="model.status == '不合格'" label="不合格原因" v-model="item.reason">
+            <template #suffix>
+              <wd-picker
+                :columns="dictData.warehouse_check_reason"
+                v-model="item.reason"
+                use-default-slot
+              >
+                <wd-button size="small">选择</wd-button>
+              </wd-picker>
+            </template>
+          </wd-input>
+          <wd-picker
+            v-if="model.status == '不合格'"
+            :columns="dictData.warehouse_check_method"
+            label="处理方式"
+            v-model="item.processingMethod"
+          />
+        </wd-cell-group>
+      </wd-card>
+      <template #right>
+        <view class="h-full pr-2 m-auto flex items-center justify-center">
+          <wd-icon name="delete" color="red" size="22px" @click="deleteClick(index)"></wd-icon>
+        </view>
+      </template>
+    </wd-swipe-action>
+
     <wd-fab :gap="{ bottom: 80, right: 15 }" :z-index="1" :expandable="false">
       <template #trigger>
         <view
@@ -148,6 +156,10 @@ function onScanSuccess(id) {
     detailList.value.unshift(_data)
   })
   scanCode.value = ''
+}
+
+function deleteClick(index) {
+  detailList.value.splice(index, 1)
 }
 </script>
 

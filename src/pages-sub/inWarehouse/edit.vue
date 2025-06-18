@@ -44,19 +44,26 @@
         />
       </wd-cell-group>
     </wd-form>
-    <wd-card v-for="item in detailList" :title="item.productName" :key="item.id">
-      <!-- <template v-slot:title>
+    <wd-swipe-action v-for="(item, index) in detailList" :key="item.id">
+      <wd-card :title="item.productName">
+        <!-- <template v-slot:title>
         
       </template> -->
-      <wd-cell-group>
-        <wd-cell title="产品编号" :value="item.productCode" />
-        <wd-cell title="订单编号" :value="item.associationCode" />
-        <wd-cell title="仓库" :value="item.wareName" />
-        <wd-cell title="库位" :value="item.positionName" />
-        <wd-cell title="入库数量" :value="item.inStoreQty" />
-        <wd-cell title="当前库存数量" :value="item.inStoreQty" />
-      </wd-cell-group>
-    </wd-card>
+        <wd-cell-group>
+          <wd-cell title="产品编号" :value="item.productCode" />
+          <wd-cell title="订单编号" :value="item.associationCode" />
+          <wd-cell title="仓库" :value="item.wareName" />
+          <wd-cell title="库位" :value="item.positionName" />
+          <wd-cell title="入库数量" :value="item.inStoreQty" />
+          <wd-cell title="当前库存数量" :value="item.inStoreQty" />
+        </wd-cell-group>
+      </wd-card>
+      <template #right>
+        <view class="h-full pr-2 m-auto flex items-center justify-center">
+          <wd-icon name="delete" color="red" size="22px" @click="deleteClick(index)"></wd-icon>
+        </view>
+      </template>
+    </wd-swipe-action>
 
     <wd-popup v-model="showDetail" position="bottom" closable>
       <view class="text-center font-bold lh-10">明细设置</view>
@@ -343,6 +350,13 @@ function saveDetail() {
 }
 
 const scanCode = ref('')
+
+function deleteClick(index) {
+  detailList.value.splice(index, 1)
+  if (detailList.value.length === 0) {
+    buyAssociationId.value = ''
+  }
+}
 </script>
 
 <style lang="scss" scoped>
