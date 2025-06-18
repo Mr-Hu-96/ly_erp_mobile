@@ -123,6 +123,15 @@ function scanClick() {
 
 function onScanSuccess(id) {
   // any error handling
+  if (id) {
+    const exists = detailList.value.some((item) => item.id === Number(id))
+    if (exists) {
+      return uni.showToast({
+        title: '已存在标签',
+        icon: 'none',
+      })
+    }
+  }
   scanCheckApi({
     labelId: id,
     associationId: model.associationId,

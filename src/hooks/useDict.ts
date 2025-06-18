@@ -9,7 +9,7 @@ export interface DictOption {
 export function useDictData<T extends string>(dictKeys: readonly T[]) {
   // 👇 使用 shallowReactive 保证外层响应式，内层结构类型不变
   const dictData: Record<T, DictOption[]> = shallowReactive({} as Record<T, DictOption[]>)
-
+  const isLoaded = ref(false)
   const fetchDicts = async () => {
     for (const key of dictKeys) {
       try {
@@ -23,11 +23,13 @@ export function useDictData<T extends string>(dictKeys: readonly T[]) {
         dictData[key] = []
       }
     }
+    isLoaded.value = true
   }
 
   fetchDicts()
 
   return {
     dictData,
+    isLoaded,
   }
 }

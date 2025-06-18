@@ -8,7 +8,7 @@
 </route>
 
 <template>
-  <view class="mb-15">
+  <view class="pb-15">
     <wd-form ref="formRef" :model="model">
       <wd-cell-group border>
         <wd-picker
@@ -132,7 +132,12 @@ const model = reactive({
   supplier: '',
 })
 
-const { dictData } = useDictData(['base_supplier', 'sys_warehouse_status'])
+const { dictData, isLoaded } = useDictData(['base_supplier', 'sys_warehouse_status'])
+watch(isLoaded, (val) => {
+  if (val) {
+    model.warehouseType = dictData.sys_warehouse_status?.[0]?.value || ''
+  }
+})
 const detailList = ref([])
 
 const detail = reactive({
@@ -246,6 +251,16 @@ function scanClick() {
 
 function onScanSuccess(id) {
   // any error handling
+
+  if (id) {
+    const exists = detailList.value.some((item) => item.recordId === Number(id))
+    if (exists) {
+      return uni.showToast({
+        title: '已存在标签',
+        icon: 'none',
+      })
+    }
+  }
   getRecordCheckApi({
     id,
     source: model.warehouseType,
